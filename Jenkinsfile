@@ -1,7 +1,7 @@
 pipeline {
-  agent {
-    docker { image 'node:latest' } // 使用官方 Node.js Docker 镜像
-  }
+  // agent {
+  //   docker { image 'node:latest' } // 使用官方 Node.js Docker 镜像
+  // }
     // tools {
     //     nodejs 'nodejs-test'
     // }
