@@ -1,22 +1,35 @@
 pipeline {
-    agent any
-    tools {
-        nodejs 'nodejs-test'
-    }
+      agent {
+        node {
+          label 'nodejs'
+        }
+      }
+    // tools {
+    //     nodejs 'nodejs-test'
+    // }
     stages {
-        stage('测试nodejs') {
-            steps {
-                echo '测试nodejs...'
-                // 这里可以是具体的构建命令，如sh 'mvn clean package'
-                sh 'node -v'
-            }
+        stage('创建工作目录') {
+          agent none
+          steps {
+            sh 'mkdir base-frontend'
+          }
         }
-        stage('测试pnpm') {
-            steps {
-                echo '测试pnpm...'
-                // 这里可以是具体的构建命令，如sh 'mvn clean package'
-                sh 'corepack enable && corepack prepare pnpm@latest --activate && pnpm -v'
+        stage('拉取代码') {
+          parallel {
+            stage('拉取base-frontend') {
+              agent none
+              steps {
+                container('nodejs') {
+                  sh 'docker version'
+                  sh 'ls -an'
+                  // dir('base-frontend') {
+                  //   git(url: 'https://codeup.aliyun.com/6554702f31a848a7a756bd80/ids-base-frontend.git', credentialsId: 'git', branch: 'kbs', changelog: true, poll: false)
+                  // }
+                }
+              }
             }
+          }
         }
+
     }
 }
